@@ -34,7 +34,8 @@ function makeArray(n = 7) {
 
 export default function BubbleSort() {
   const navigate = useNavigate()
-  const { completeLevel } = useGame()
+  const { completeLevel, state } = useGame()
+  const backDest = state.returnToRPG ? '/rpg' : '/'
 
   const [phase, setPhase] = useState('intro')   // intro | challenge | auto | score
   const [arr, setArr] = useState(() => makeArray())
@@ -219,8 +220,9 @@ export default function BubbleSort() {
           { label: 'Accuracy', value: `${score.accuracy}%` },
         ]}
         onRetry={reset}
-        onNext={() => navigate('/level/binary-search')}
-        onHome={() => navigate('/')}
+        onNext={() => navigate(state.returnToRPG ? '/approach' : '/level/binary-search')}
+        nextLabel={state.returnToRPG ? 'APPROACH \u25B6' : 'NEXT LEVEL \u2192'}
+        onHome={() => navigate(backDest)}
       />
     )
   }
@@ -231,11 +233,11 @@ export default function BubbleSort() {
       {/* ── Top bar ── */}
       <div className="flex items-center justify-between px-3 py-2 border-b border-[#1a1a2a]">
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate(backDest)}
           className="pixel-btn pixel-btn-secondary"
           style={{ fontSize: '0.5rem', padding: '0.45rem 0.7rem', minHeight: '36px' }}
         >
-          ← HOME
+          {state.returnToRPG ? '← ADVENTURE' : '← HOME'}
         </button>
         <div className="pixel-font text-center" style={{ fontSize: 'clamp(0.4rem, 2vw, 0.6rem)', color: '#d97706' }}>
           LV.1 — BUBBLE SORT

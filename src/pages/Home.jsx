@@ -1,22 +1,48 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useGame } from '../store/GameContext.jsx'
 import { LEVELS } from '../store/gameStore.js'
 import LevelCard from '../components/LevelCard.jsx'
 import ProgressBar from '../components/ProgressBar.jsx'
+import SettingsModal from '../components/SettingsModal.jsx'
 
-const MAX_XP = 450 // total XP available across all levels
+const MAX_XP = LEVELS.reduce((sum, l) => sum + (l.xpReward || 0), 0)
 
 const TITLE_LINES = ['ALGO', 'QUEST']
 
 export default function Home() {
+  const navigate = useNavigate()
   const { state } = useGame()
   const completedCount = state.completedLevels.length
+  const [settingsOpen, setSettingsOpen] = useState(false)
 
   return (
-    <div className="min-h-dvh bg-[#0a0a0f] flex flex-col overflow-x-hidden">
+    <div className="min-h-dvh page-bg flex flex-col overflow-x-hidden">
+
+      <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />
 
       {/* ── Header / Title ── */}
       <header className="flex flex-col items-center pt-8 pb-4 px-4 gap-3">
+        {/* Top-right actions */}
+        <div className="self-end mb-1 flex gap-2">
+          <button
+            onClick={() => navigate(state.hasSeenIntro ? '/rpg' : '/intro')}
+            className="pixel-btn pixel-btn-coral"
+            style={{ fontSize: '0.45rem', padding: '0.4rem 0.7rem', minHeight: '36px' }}
+            aria-label="RPG Mode"
+          >
+            ♥ RPG MODE
+          </button>
+          <button
+            onClick={() => setSettingsOpen(true)}
+            className="pixel-btn pixel-btn-secondary"
+            style={{ fontSize: '0.45rem', padding: '0.4rem 0.7rem', minHeight: '36px' }}
+            aria-label="Open settings"
+          >
+            ⚙ SETTINGS
+          </button>
+        </div>
         {/* Pixel art title */}
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
@@ -25,14 +51,14 @@ export default function Home() {
           className="relative"
         >
           <div
-            className="pixel-font text-glow-amber select-none text-center leading-loose"
-            style={{ fontSize: 'clamp(1.4rem, 8vw, 3rem)', color: '#f59e0b' }}
+            className="pixel-font text-glow-amber title-algo select-none text-center leading-loose"
+            style={{ fontSize: 'clamp(1.4rem, 8vw, 3rem)' }}
           >
             ALGO
           </div>
           <div
-            className="pixel-font text-glow-coral select-none text-center leading-loose -mt-2"
-            style={{ fontSize: 'clamp(1.4rem, 8vw, 3rem)', color: '#e8645a' }}
+            className="pixel-font text-glow-coral title-quest select-none text-center leading-loose -mt-2"
+            style={{ fontSize: 'clamp(1.4rem, 8vw, 3rem)' }}
           >
             QUEST
           </div>
@@ -62,7 +88,7 @@ export default function Home() {
         transition={{ delay: 0.25 }}
         className="mx-auto w-full max-w-md px-4 mb-2"
       >
-        <div className="pixel-border-amber bg-[#12121a] p-3 sm:p-4">
+        <div className="pixel-border-amber card-bg p-3 sm:p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="pixel-font text-[0.5rem] sm:text-[0.6rem] text-[#d97706]">
               ♥ PLAYER

@@ -57,7 +57,8 @@ function calcStars(steps) {
 
 export default function BFSMaze() {
   const navigate = useNavigate()
-  const { completeLevel } = useGame()
+  const { completeLevel, state } = useGame()
+  const backDest = state.returnToRPG ? '/rpg' : '/'
 
   const [phase, setPhase] = useState('intro')
   const [visited, setVisited] = useState(new Set([cellKey(...START)]))
@@ -151,10 +152,10 @@ export default function BFSMaze() {
           { label: 'Grid size',      value: `${ROWS}×${COLS}` },
         ]}
         onRetry={reset}
-        onNext={() => navigate('/')}
-        onHome={() => navigate('/')}
-        nextLabel="ALL DONE! →"
-        hasNext={false}
+        onNext={() => navigate(state.returnToRPG ? '/approach' : backDest)}
+        onHome={() => navigate(backDest)}
+        nextLabel={state.returnToRPG ? 'APPROACH \u25B6' : 'ALL DONE! \u2192'}
+        hasNext={true}
       />
     )
   }
@@ -199,11 +200,11 @@ export default function BFSMaze() {
       {/* Top bar */}
       <div className="flex items-center justify-between px-3 py-2 border-b border-[#1a1a2a]">
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate(backDest)}
           className="pixel-btn pixel-btn-secondary"
           style={{ fontSize: '0.5rem', padding: '0.45rem 0.7rem', minHeight: '36px' }}
         >
-          ← HOME
+          {state.returnToRPG ? '← ADVENTURE' : '← HOME'}
         </button>
         <div className="pixel-font text-center" style={{ fontSize: 'clamp(0.4rem, 2vw, 0.6rem)', color: '#d97706' }}>
           LV.3 — BFS MAZE

@@ -5,7 +5,7 @@ import { useGame } from '../store/GameContext.jsx'
 export default function LevelCard({ level, index }) {
   const navigate = useNavigate()
   const { state } = useGame()
-  const unlocked = isUnlocked(level.id, state.completedLevels)
+  const unlocked = isUnlocked(level.id, state.completedLevels, state.storyUnlockedLevels)
   const completed = state.completedLevels.includes(level.id)
   const stars = state.levelStars[level.id] || 0
 
@@ -55,12 +55,16 @@ export default function LevelCard({ level, index }) {
         ))}
       </div>
 
-      {/* XP badge */}
-      {unlocked && (
+      {/* XP badge / locked hint */}
+      {unlocked ? (
         <div className="pixel-font text-[0.4rem] text-[#6b6b7a] mt-1">
           +{level.xpReward} XP
         </div>
-      )}
+      ) : level.lockedHint ? (
+        <div className="text-[0.6rem] text-[#4a4a5a] mt-1 leading-tight">
+          {level.lockedHint}
+        </div>
+      ) : null}
 
       {/* Animated glow for unlocked/completed */}
       {unlocked && !completed && (
