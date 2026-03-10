@@ -2,10 +2,29 @@ import { createContext, useContext, useState } from 'react'
 import { loadState, saveState, resetState } from './gameStore.js'
 import { ENCOUNTER_UNLOCKS } from '../data/act1Progression.js'
 
+const SPEED_KEY = 'aq_animation_speed'
+const STEP_MODE_KEY = 'aq_step_mode'
+
 const Ctx = createContext(null)
 
 export function GameProvider({ children }) {
   const [state, setState] = useState(loadState)
+  const [animationSpeed, setAnimationSpeedState] = useState(
+    () => parseFloat(localStorage.getItem(SPEED_KEY)) || 1
+  )
+  const [stepMode, setStepModeState] = useState(
+    () => localStorage.getItem(STEP_MODE_KEY) === 'true'
+  )
+
+  function setAnimationSpeed(speed) {
+    setAnimationSpeedState(speed)
+    localStorage.setItem(SPEED_KEY, String(speed))
+  }
+
+  function setStepMode(enabled) {
+    setStepModeState(enabled)
+    localStorage.setItem(STEP_MODE_KEY, String(enabled))
+  }
 
   // ── Level Mode ─────────────────────────────────────────────────────────────
   function completeLevel(levelId, stars, xpEarned) {
@@ -167,6 +186,10 @@ export function GameProvider({ children }) {
       clearLastEffects,
       unlockLevel,
       resetGame,
+      animationSpeed,
+      setAnimationSpeed,
+      stepMode,
+      setStepMode,
     }}>
       {children}
     </Ctx.Provider>
