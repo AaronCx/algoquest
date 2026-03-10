@@ -9,6 +9,7 @@ import LinearSearch from './levels/linear-search/LinearSearch.jsx'
 import SelectionSort from './levels/selection-sort/SelectionSort.jsx'
 import EuclidGCD from './levels/euclid-gcd/EuclidGCD.jsx'
 import FloydCycle from './levels/floyd-cycle/FloydCycle.jsx'
+import Dijkstra from './levels/dijkstra/Dijkstra.jsx'
 import Overworld from './overworld/Overworld.jsx'
 import EndingScreen from './overworld/EndingScreen.jsx'
 import PlaceholderBattle from './overworld/PlaceholderBattle.jsx'
@@ -28,6 +29,7 @@ export default function App() {
       <Route path="/level/selection-sort"   element={<SelectionSort />} />
       <Route path="/level/euclid-gcd"       element={<EuclidGCD />} />
       <Route path="/level/floyd-cycle"      element={<FloydCycle />} />
+      <Route path="/level/dijkstra"         element={<Dijkstra />} />
       <Route path="/rpg"                    element={<Overworld />} />
       <Route path="/ending"                 element={<EndingScreen />} />
       <Route path="/battle/:battleId"       element={<PlaceholderBattle />} />

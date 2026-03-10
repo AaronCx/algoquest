@@ -107,8 +107,16 @@ export const LEVEL_REGISTRY = [
     type: 'Sorting',
     route: '/level/quick-sort',
     xpReward: 250,
-    storyOnly: true,
-    lockedHint: 'Complete the RPG adventure to unlock.',
+    unlockAfter: 'bubble-sort',
+  },
+  {
+    id: 'dijkstra',
+    name: "Dijkstra's Algorithm",
+    emoji: '\uD83D\uDDFA\uFE0F',
+    type: 'Graph',
+    route: '/level/dijkstra',
+    xpReward: 200,
+    unlockAfter: 'bfs-maze',
   },
 ]
 
