@@ -6,6 +6,7 @@ import { LEVELS } from '../store/gameStore.js'
 import LevelCard from '../components/LevelCard.jsx'
 import ProgressBar from '../components/ProgressBar.jsx'
 import SettingsModal from '../components/SettingsModal.jsx'
+import ProgressTracker from '../components/ProgressTracker.jsx'
 
 const MAX_XP = LEVELS.reduce((sum, l) => sum + (l.xpReward || 0), 0)
 
@@ -122,6 +123,9 @@ export default function Home() {
           </div>
         </div>
       </motion.section>
+
+      {/* ── Progress Tracker ── */}
+      <ProgressTracker />
 
       {/* ── Marquee divider ── */}
       <div className="overflow-hidden whitespace-nowrap py-2 border-y border-[#1a1a2a] mb-2">
