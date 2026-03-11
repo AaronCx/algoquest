@@ -101,6 +101,15 @@ export const LEVEL_REGISTRY = [
     encounterId: 'bfs_rescue',
   },
   {
+    id: 'merge-sort',
+    name: 'Merge Sort',
+    emoji: '\uD83E\uDDE9',
+    type: 'Sorting',
+    route: '/level/merge-sort',
+    xpReward: 200,
+    unlockAfter: 'bubble-sort',
+  },
+  {
     id: 'quick-sort',
     name: 'Quick Sort',
     emoji: '\u26A1',
@@ -117,6 +126,15 @@ export const LEVEL_REGISTRY = [
     route: '/level/dijkstra',
     xpReward: 200,
     unlockAfter: 'bfs-maze',
+  },
+  {
+    id: 'bst',
+    name: 'Binary Search Tree',
+    emoji: '\uD83C\uDF33',
+    type: 'Data Structure',
+    route: '/level/bst',
+    xpReward: 180,
+    unlockAfter: 'binary-search',
   },
 ]
 
