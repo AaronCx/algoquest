@@ -101,6 +101,15 @@ export const LEVEL_REGISTRY = [
     encounterId: 'bfs_rescue',
   },
   {
+    id: 'heap-sort',
+    name: 'Heap Sort',
+    emoji: '\uD83C\uDFD4\uFE0F',
+    type: 'Sorting',
+    route: '/level/heap-sort',
+    xpReward: 220,
+    unlockAfter: 'bubble-sort',
+  },
+  {
     id: 'merge-sort',
     name: 'Merge Sort',
     emoji: '\uD83E\uDDE9',
