@@ -78,6 +78,7 @@ bun run deploy    # push to gh-pages branch
 
 ## Tech Stack
 
+- **Bun** (runtime & package manager)
 - **React 19** + **Vite 7**
 - **Tailwind CSS 3** (utility-first styling)
 - **Framer Motion 12** (animations)
