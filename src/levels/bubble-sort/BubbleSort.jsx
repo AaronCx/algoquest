@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import DialogBox from '../../components/DialogBox.jsx'
 import ScoreScreen from '../../components/ScoreScreen.jsx'
+import StepControls from '../../components/StepControls.jsx'
 import { useGame } from '../../store/GameContext.jsx'
 
 const LEVEL_ID = 'bubble-sort'
@@ -34,7 +35,7 @@ function makeArray(n = 7) {
 
 export default function BubbleSort() {
   const navigate = useNavigate()
-  const { completeLevel, state } = useGame()
+  const { completeLevel, state, stepMode, animationSpeed } = useGame()
   const backDest = state.returnToRPG ? '/rpg' : '/'
 
   const [phase, setPhase] = useState('intro')   // intro | challenge | auto | score
@@ -49,8 +50,19 @@ export default function BubbleSort() {
   const [autoArr, setAutoArr] = useState(null)
   const [autoHighlight, setAutoHighlight] = useState(null)
 
+  // Step mode state
+  const [stepPaused, setStepPaused] = useState(stepMode) // start paused if step mode
+  const [stepIndex, setStepIndex] = useState(0)
+  const [stepTotal, setStepTotal] = useState(0)
+  const [stepDesc, setStepDesc] = useState('')
+  const stepsRef = useRef([])
+  const stepStateRef = useRef({ current: [], si: 0, currentSortedFrom: 0 })
+
   const autoRef = useRef(null)
   const N = arr.length
+
+  // Scale timing by animation speed (higher speed = shorter delays)
+  const t = useCallback((ms) => Math.round(ms / animationSpeed), [animationSpeed])
 
   // ── Challenge: player decides SWAP or KEEP ──────────────────────────
   const handleChoice = useCallback((choice) => {
@@ -76,12 +88,13 @@ export default function BubbleSort() {
       if (cmpIdx + 1 >= N - 1) {
         setSortedFrom(N - 1)
         setAutoArr([...newArr])
+        setStepPaused(stepMode) // pause at start of auto if step mode
         setPhase('auto')
       } else {
         setCmpIdx(i => i + 1)
       }
-    }, 350)
-  }, [phase, arr, cmpIdx, N])
+    }, t(350))
+  }, [phase, arr, cmpIdx, N, t, stepMode])
 
   // ── Keyboard shortcut: S = swap, K = keep ──────────────────────────
   useEffect(() => {
@@ -94,69 +107,123 @@ export default function BubbleSort() {
     return () => window.removeEventListener('keydown', handler)
   }, [phase, handleChoice])
 
-  // ── Auto-complete animation ─────────────────────────────────────────
+  // ── Build steps on entering auto phase ──────────────────────────────
+  const autoInitRef = useRef(null)
   useEffect(() => {
     if (phase !== 'auto' || !autoArr) return
+    // Only build steps once per auto phase entry
+    if (autoInitRef.current === autoArr) return
+    autoInitRef.current = autoArr
 
-    // Build all remaining steps (passes after the first)
     const steps = []
     const a = [...autoArr]
-    const sf = autoArr.length - 1 // first sorted element index
+    const sf = autoArr.length - 1
 
     for (let end = sf - 1; end >= 1; end--) {
       for (let j = 0; j < end; j++) {
         if (a[j] > a[j + 1]) {
-          steps.push({ type: 'swap', i: j, j: j + 1 })
+          steps.push({ type: 'swap', i: j, j: j + 1, desc: `Swapping elements ${a[j]} and ${a[j + 1]}` })
           ;[a[j], a[j + 1]] = [a[j + 1], a[j]]
         } else {
-          steps.push({ type: 'compare', i: j, j: j + 1 })
+          steps.push({ type: 'compare', i: j, j: j + 1, desc: `Comparing elements ${a[j]} and ${a[j + 1]} — no swap needed` })
         }
       }
-      steps.push({ type: 'sorted', from: end })
+      steps.push({ type: 'sorted', from: end, desc: `Position ${end} is now sorted` })
     }
 
+    stepsRef.current = steps
+    setStepTotal(steps.length)
+    setStepIndex(0)
+    stepStateRef.current = { current: [...autoArr], si: 0, currentSortedFrom: sf }
+
     if (steps.length === 0) {
-      setTimeout(finishScore, 600)
+      setTimeout(finishScore, t(600))
       return
     }
 
-    let current = [...autoArr]
-    let si = 0
-    let currentSortedFrom = sf
-
-    function runStep() {
-      if (si >= steps.length) {
-        setAutoHighlight(null)
-        setTimeout(finishScore, 500)
-        return
-      }
-      const step = steps[si++]
-
-      if (step.type === 'swap') {
-        ;[current[step.i], current[step.j]] = [current[step.j], current[step.i]]
-        setAutoArr([...current])
-        setAutoHighlight({ type: 'swap', indices: [step.i, step.j] })
-        setSortedFrom(null) // will update
-        autoRef.current = setTimeout(() => {
-          setAutoHighlight(null)
-          autoRef.current = setTimeout(runStep, 60)
-        }, 180)
-      } else if (step.type === 'compare') {
-        setAutoHighlight({ type: 'compare', indices: [step.i, step.j] })
-        autoRef.current = setTimeout(() => {
-          setAutoHighlight(null)
-          autoRef.current = setTimeout(runStep, 40)
-        }, 130)
-      } else if (step.type === 'sorted') {
-        currentSortedFrom = step.from
-        setSortedFrom(currentSortedFrom)
-        autoRef.current = setTimeout(runStep, 60)
-      }
+    // If not in step mode, start auto-playing
+    if (!stepMode) {
+      autoRef.current = setTimeout(() => runAutoStep(), t(400))
+    } else {
+      // Show first step description
+      setStepDesc(steps[0]?.desc || '')
     }
 
-    autoRef.current = setTimeout(runStep, 400)
     return () => clearTimeout(autoRef.current)
-  }, [phase, autoArr])
+  }, [phase]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Run a single auto step ─────────────────────────────────────────
+  const runAutoStep = useCallback(() => {
+    const steps = stepsRef.current
+    const st = stepStateRef.current
+    if (st.si >= steps.length) {
+      setAutoHighlight(null)
+      setStepDesc('')
+      setTimeout(finishScore, t(500))
+      return
+    }
+    const step = steps[st.si]
+    st.si++
+    setStepIndex(st.si)
+    setStepDesc(step.desc || '')
+
+    if (step.type === 'swap') {
+      ;[st.current[step.i], st.current[step.j]] = [st.current[step.j], st.current[step.i]]
+      setAutoArr([...st.current])
+      setAutoHighlight({ type: 'swap', indices: [step.i, step.j] })
+      setSortedFrom(null)
+      if (!stepMode || !stepPaused) {
+        autoRef.current = setTimeout(() => {
+          setAutoHighlight(null)
+          autoRef.current = setTimeout(() => runAutoStep(), t(60))
+        }, t(180))
+      }
+    } else if (step.type === 'compare') {
+      setAutoHighlight({ type: 'compare', indices: [step.i, step.j] })
+      if (!stepMode || !stepPaused) {
+        autoRef.current = setTimeout(() => {
+          setAutoHighlight(null)
+          autoRef.current = setTimeout(() => runAutoStep(), t(40))
+        }, t(130))
+      }
+    } else if (step.type === 'sorted') {
+      st.currentSortedFrom = step.from
+      setSortedFrom(st.currentSortedFrom)
+      if (!stepMode || !stepPaused) {
+        autoRef.current = setTimeout(() => runAutoStep(), t(60))
+      }
+    }
+  }, [stepMode, stepPaused, t]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Step mode: advance one step ────────────────────────────────────
+  function handleNextStep() {
+    if (phase !== 'auto') return
+    clearTimeout(autoRef.current)
+    setAutoHighlight(null)
+    runAutoStep()
+  }
+
+  // ── Step mode: toggle play/pause ───────────────────────────────────
+  function handlePlayPause() {
+    if (!stepPaused) {
+      // Pause: clear any pending timer
+      clearTimeout(autoRef.current)
+      setStepPaused(true)
+    } else {
+      // Resume: start running from current position
+      setStepPaused(false)
+      setAutoHighlight(null)
+      autoRef.current = setTimeout(() => runAutoStep(), t(100))
+    }
+  }
+
+  // When stepPaused changes to false while in auto, resume
+  useEffect(() => {
+    if (phase === 'auto' && !stepPaused && stepMode && stepStateRef.current.si > 0) {
+      clearTimeout(autoRef.current)
+      autoRef.current = setTimeout(() => runAutoStep(), t(100))
+    }
+  }, [stepPaused]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function finishScore() {
     const accuracy = total > 0 ? correct / total : 1
@@ -180,6 +247,13 @@ export default function BubbleSort() {
     setTotal(0)
     setScore(null)
     setAutoHighlight(null)
+    setStepPaused(stepMode)
+    setStepIndex(0)
+    setStepTotal(0)
+    setStepDesc('')
+    stepsRef.current = []
+    stepStateRef.current = { current: [], si: 0, currentSortedFrom: 0 }
+    autoInitRef.current = null
     setPhase('intro')
   }
 
@@ -385,15 +459,31 @@ export default function BubbleSort() {
               key="auto"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="pixel-dialog pointer-events-none"
+              className="flex flex-col gap-3"
             >
-              <div className="flex items-center gap-3">
-                <span className="text-[#d97706] animate-pulse-glow text-lg">⚙️</span>
-                <div>
-                  <p className="pixel-font text-[0.6rem] text-[#d97706]">AUTO-COMPLETING...</p>
-                  <p className="text-[#6b6b7a] text-sm mt-1">Watch the algorithm bubble up the remaining elements!</p>
+              <div className="pixel-dialog pointer-events-none">
+                <div className="flex items-center gap-3">
+                  <span className="text-[#d97706] animate-pulse-glow text-lg">⚙️</span>
+                  <div>
+                    <p className="pixel-font text-[0.6rem] text-[#d97706]">
+                      {stepMode && stepPaused ? 'STEP MODE — PAUSED' : 'AUTO-COMPLETING...'}
+                    </p>
+                    <p className="text-[#6b6b7a] text-sm mt-1">
+                      {stepMode
+                        ? 'Use the controls below to step through the algorithm.'
+                        : 'Watch the algorithm bubble up the remaining elements!'}
+                    </p>
+                  </div>
                 </div>
               </div>
+              <StepControls
+                isPlaying={!stepPaused}
+                onPlayPause={handlePlayPause}
+                onNextStep={handleNextStep}
+                currentStep={stepIndex}
+                totalSteps={stepTotal}
+                stepDescription={stepDesc}
+              />
             </motion.div>
           )}
         </AnimatePresence>
