@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useGame } from '../store/GameContext.jsx'
-import { LEVELS } from '../store/gameStore.js'
+import { LEVELS, isUnlocked } from '../store/gameStore.js'
 import LevelCard from '../components/LevelCard.jsx'
 import ProgressBar from '../components/ProgressBar.jsx'
 import SettingsModal from '../components/SettingsModal.jsx'
@@ -17,6 +17,82 @@ export default function Home() {
   const { state } = useGame()
   const completedCount = state.completedLevels.length
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [focusedLevel, setFocusedLevel] = useState(-1)
+  const levelGridRef = useRef(null)
+
+  // Keyboard navigation for level cards
+  const handleKeyDown = useCallback((e) => {
+    // Don't handle keys when settings modal is open
+    if (settingsOpen) return
+
+    const cols = window.innerWidth >= 640 ? 3 : 1 // matches sm:grid-cols-3
+    const total = LEVELS.length
+
+    switch (e.key) {
+      case 'ArrowRight': {
+        e.preventDefault()
+        setFocusedLevel(prev => {
+          const next = prev < 0 ? 0 : Math.min(prev + 1, total - 1)
+          return next
+        })
+        break
+      }
+      case 'ArrowLeft': {
+        e.preventDefault()
+        setFocusedLevel(prev => {
+          const next = prev <= 0 ? 0 : prev - 1
+          return next
+        })
+        break
+      }
+      case 'ArrowDown': {
+        e.preventDefault()
+        setFocusedLevel(prev => {
+          const next = prev < 0 ? 0 : Math.min(prev + cols, total - 1)
+          return next
+        })
+        break
+      }
+      case 'ArrowUp': {
+        e.preventDefault()
+        setFocusedLevel(prev => {
+          const next = prev < 0 ? 0 : Math.max(prev - cols, 0)
+          return next
+        })
+        break
+      }
+      case 'Enter': {
+        if (focusedLevel >= 0 && focusedLevel < total) {
+          const level = LEVELS[focusedLevel]
+          if (isUnlocked(level.id, state.completedLevels, state.storyUnlockedLevels)) {
+            navigate(level.route)
+          }
+        }
+        break
+      }
+      case 'Escape': {
+        setFocusedLevel(-1)
+        break
+      }
+      default:
+        break
+    }
+  }, [settingsOpen, focusedLevel, state.completedLevels, state.storyUnlockedLevels, navigate])
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [handleKeyDown])
+
+  // Scroll focused level card into view
+  useEffect(() => {
+    if (focusedLevel >= 0 && levelGridRef.current) {
+      const cards = levelGridRef.current.querySelectorAll('[data-level-card]')
+      if (cards[focusedLevel]) {
+        cards[focusedLevel].scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      }
+    }
+  }, [focusedLevel])
 
   return (
     <div className="min-h-dvh page-bg flex flex-col overflow-x-hidden">
@@ -145,15 +221,16 @@ export default function Home() {
             ─── SELECT LEVEL ───
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
+          <div ref={levelGridRef} className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
             {LEVELS.map((level, i) => (
               <motion.div
                 key={level.id}
+                data-level-card
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 + i * 0.12 }}
               >
-                <LevelCard level={level} index={i} />
+                <LevelCard level={level} index={i} focused={focusedLevel === i} />
               </motion.div>
             ))}
           </div>
@@ -181,6 +258,11 @@ export default function Home() {
 
       {/* ── Footer ── */}
       <footer className="text-center py-3 border-t border-[#1a1a2a]">
+        <p className="text-[#3a3a4a] mb-1" style={{ fontSize: 'clamp(0.5rem, 1.5vw, 0.6rem)' }}>
+          <kbd className="bg-[#1a1a2a] px-1 rounded text-[#6b6b7a]">Arrow keys</kbd> navigate{' '}
+          <kbd className="bg-[#1a1a2a] px-1 rounded text-[#6b6b7a]">Enter</kbd> select{' '}
+          <kbd className="bg-[#1a1a2a] px-1 rounded text-[#6b6b7a]">Esc</kbd> deselect
+        </p>
         <p className="pixel-font text-[0.38rem] text-[#2a2a3a]">
           ALGOQUEST v1.0 — BUILT WITH ♥ AND REACT
         </p>

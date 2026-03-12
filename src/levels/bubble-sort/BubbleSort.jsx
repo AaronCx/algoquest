@@ -96,16 +96,34 @@ export default function BubbleSort() {
     }, t(350))
   }, [phase, arr, cmpIdx, N, t, stepMode])
 
-  // ── Keyboard shortcut: S = swap, K = keep ──────────────────────────
+  // ── Keyboard shortcuts ──────────────────────────────────────────────
   useEffect(() => {
     const handler = (e) => {
-      if (phase !== 'challenge') return
-      if (e.key === 's' || e.key === 'S') handleChoice('swap')
-      if (e.key === 'k' || e.key === 'K') handleChoice('keep')
+      // S/K for swap/keep during challenge
+      if (phase === 'challenge') {
+        if (e.key === 's' || e.key === 'S') handleChoice('swap')
+        if (e.key === 'k' || e.key === 'K') handleChoice('keep')
+      }
+      // Space to pause/play during auto
+      if (e.key === ' ') {
+        e.preventDefault()
+        if (phase === 'auto') handlePlayPause()
+      }
+      // Left/Right for step navigation during auto (when paused)
+      if (phase === 'auto' && stepPaused) {
+        if (e.key === 'ArrowRight') {
+          e.preventDefault()
+          handleNextStep()
+        }
+      }
+      // Escape to go back
+      if (e.key === 'Escape') {
+        navigate(backDest)
+      }
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [phase, handleChoice])
+  }, [phase, handleChoice, stepPaused, backDest, navigate]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Build steps on entering auto phase ──────────────────────────────
   const autoInitRef = useRef(null)
@@ -435,7 +453,8 @@ export default function BubbleSort() {
               {/* Hint */}
               <p className="text-center text-[#6b6b7a]" style={{ fontSize: 'clamp(0.5rem, 2vw, 0.65rem)' }}>
                 Press <kbd className="bg-[#2a2a3a] px-1 rounded text-[#f0e6d3]">S</kbd> to swap,{' '}
-                <kbd className="bg-[#2a2a3a] px-1 rounded text-[#f0e6d3]">K</kbd> to keep
+                <kbd className="bg-[#2a2a3a] px-1 rounded text-[#f0e6d3]">K</kbd> to keep,{' '}
+                <kbd className="bg-[#2a2a3a] px-1 rounded text-[#f0e6d3]">Esc</kbd> to go back
               </p>
 
               {/* Progress dots */}

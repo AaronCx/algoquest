@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { isUnlocked } from '../store/gameStore.js'
 import { useGame } from '../store/GameContext.jsx'
 
-export default function LevelCard({ level, index }) {
+export default function LevelCard({ level, index, focused = false }) {
   const navigate = useNavigate()
   const { state } = useGame()
   const unlocked = isUnlocked(level.id, state.completedLevels, state.storyUnlockedLevels)
@@ -27,6 +27,11 @@ export default function LevelCard({ level, index }) {
       tabIndex={unlocked ? 0 : -1}
       role={unlocked ? 'button' : 'presentation'}
       aria-label={`${level.name} — ${completed ? 'completed' : unlocked ? 'play' : 'locked'}`}
+      style={focused ? {
+        outline: '3px solid #f59e0b',
+        outlineOffset: '2px',
+        boxShadow: '0 0 16px rgba(245,158,11,0.4)',
+      } : undefined}
     >
       {/* Number badge */}
       <div className="absolute top-2 right-2 pixel-font text-[0.45rem] text-[#6b6b7a]">
