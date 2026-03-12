@@ -65,15 +65,15 @@ Each level includes quiz questions, star ratings, and XP rewards.
 ## Setup
 
 ```bash
-npm install
-npm run dev       # localhost:5173
+bun install
+bun run dev       # localhost:5173
 ```
 
 ## Build & Deploy
 
 ```bash
-npm run build     # production build -> dist/
-npm run deploy    # push to gh-pages branch
+bun run build     # production build -> dist/
+bun run deploy    # push to gh-pages branch
 ```
 
 ## Tech Stack
