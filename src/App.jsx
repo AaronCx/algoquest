@@ -13,6 +13,7 @@ import EuclidGCD from './levels/euclid-gcd/EuclidGCD.jsx'
 import FloydCycle from './levels/floyd-cycle/FloydCycle.jsx'
 import Dijkstra from './levels/dijkstra/Dijkstra.jsx'
 import BSTLevel from './levels/bst/BST.jsx'
+import DFSTraversal from './levels/dfs-traversal/DFSTraversal.jsx'
 import Overworld from './overworld/Overworld.jsx'
 import EndingScreen from './overworld/EndingScreen.jsx'
 import PlaceholderBattle from './overworld/PlaceholderBattle.jsx'
@@ -36,6 +37,7 @@ export default function App() {
       <Route path="/level/floyd-cycle"      element={<FloydCycle />} />
       <Route path="/level/dijkstra"         element={<Dijkstra />} />
       <Route path="/level/bst"              element={<BSTLevel />} />
+      <Route path="/level/dfs-traversal"    element={<DFSTraversal />} />
       <Route path="/rpg"                    element={<Overworld />} />
       <Route path="/ending"                 element={<EndingScreen />} />
       <Route path="/battle/:battleId"       element={<PlaceholderBattle />} />

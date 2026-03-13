@@ -145,6 +145,15 @@ export const LEVEL_REGISTRY = [
     xpReward: 180,
     unlockAfter: 'binary-search',
   },
+  {
+    id: 'dfs-traversal',
+    name: 'DFS Traversal',
+    emoji: '\uD83E\uDDED',
+    type: 'Graph',
+    route: '/level/dfs-traversal',
+    xpReward: 190,
+    unlockAfter: 'bfs-maze',
+  },
 ]
 
 // Map encounter ID → level IDs unlocked on completion
