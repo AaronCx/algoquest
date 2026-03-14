@@ -490,3 +490,63 @@
 [data-theme="mono"] .hp-bar-track {
   border-color: #888888;
 }
+
+/* ── Very small screens (below 375px) ────────────────────────────────── */
+@media (max-width: 374px) {
+  /* Level grid: always single column */
+  .level-card {
+    padding: 0.6rem;
+    gap: 0.35rem;
+  }
+
+  /* Smaller algorithm visualization bars */
+  .bar-chart-container {
+    gap: 1px;
+  }
+
+  /* Settings modal: full-screen on tiny devices */
+  .settings-panel-mobile {
+    max-width: 100% !important;
+    border-radius: 0;
+  }
+
+  /* Dialog text: smaller font */
+  .pixel-dialog {
+    padding: 0.6rem;
+    font-size: 0.75rem;
+  }
+
+  .pixel-dialog p {
+    font-size: 0.72rem;
+    line-height: 1.4;
+  }
+
+  /* Pixel buttons: ensure 44px minimum touch targets */
+  .pixel-btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.5rem 0.6rem;
+  }
+
+  /* Pixel font: slightly smaller on tiny screens */
+  .pixel-font {
+    letter-spacing: 0.03em;
+  }
+
+  /* Progress bar: thinner */
+  .hp-bar-track {
+    height: 14px;
+  }
+
+  /* Level card emoji: smaller */
+  .level-card .text-2xl {
+    font-size: 1.2rem;
+  }
+
+  /* Ensure header buttons wrap properly */
+  header .flex.gap-2 {
+    gap: 0.35rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
