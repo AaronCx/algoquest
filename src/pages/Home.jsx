@@ -7,6 +7,7 @@ import LevelCard from '../components/LevelCard.jsx'
 import ProgressBar from '../components/ProgressBar.jsx'
 import SettingsModal from '../components/SettingsModal.jsx'
 import ProgressTracker from '../components/ProgressTracker.jsx'
+import HowToPlayModal from '../components/HowToPlayModal.jsx'
 
 const MAX_XP = LEVELS.reduce((sum, l) => sum + (l.xpReward || 0), 0)
 
@@ -17,13 +18,14 @@ export default function Home() {
   const { state } = useGame()
   const completedCount = state.completedLevels.length
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [howToPlayOpen, setHowToPlayOpen] = useState(false)
   const [focusedLevel, setFocusedLevel] = useState(-1)
   const levelGridRef = useRef(null)
 
   // Keyboard navigation for level cards
   const handleKeyDown = useCallback((e) => {
-    // Don't handle keys when settings modal is open
-    if (settingsOpen) return
+    // Don't handle keys when modals are open
+    if (settingsOpen || howToPlayOpen) return
 
     const cols = window.innerWidth >= 640 ? 3 : 1 // matches sm:grid-cols-3
     const total = LEVELS.length
@@ -77,7 +79,7 @@ export default function Home() {
       default:
         break
     }
-  }, [settingsOpen, focusedLevel, state.completedLevels, state.storyUnlockedLevels, navigate])
+  }, [settingsOpen, howToPlayOpen, focusedLevel, state.completedLevels, state.storyUnlockedLevels, navigate])
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown)
@@ -98,11 +100,20 @@ export default function Home() {
     <div className="min-h-dvh page-bg flex flex-col overflow-x-hidden">
 
       <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <HowToPlayModal open={howToPlayOpen} onClose={() => setHowToPlayOpen(false)} />
 
       {/* ── Header / Title ── */}
       <header className="flex flex-col items-center pt-8 pb-4 px-4 gap-3">
         {/* Top-right actions */}
         <div className="self-end mb-1 flex gap-2">
+          <button
+            onClick={() => setHowToPlayOpen(true)}
+            className="pixel-btn pixel-btn-secondary"
+            style={{ fontSize: '0.45rem', padding: '0.4rem 0.7rem', minHeight: '36px' }}
+            aria-label="How to Play"
+          >
+            ? HOW TO PLAY
+          </button>
           <button
             onClick={() => navigate(state.hasSeenIntro ? '/rpg' : '/intro')}
             className="pixel-btn pixel-btn-coral"
