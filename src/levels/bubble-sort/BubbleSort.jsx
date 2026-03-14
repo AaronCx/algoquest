@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import DialogBox from '../../components/DialogBox.jsx'
 import ScoreScreen from '../../components/ScoreScreen.jsx'
 import StepControls from '../../components/StepControls.jsx'
+import Tooltip from '../../components/Tooltip.jsx'
 import { useGame } from '../../store/GameContext.jsx'
 
 const LEVEL_ID = 'bubble-sort'
@@ -348,15 +349,17 @@ export default function BubbleSort() {
         {/* Legend */}
         <div className="flex gap-3 flex-wrap justify-center">
           {[
-            { color: '#d97706', label: 'Comparing' },
-            { color: '#e8645a', label: 'Swapping' },
-            { color: '#22c55e', label: 'Sorted' },
-            { color: '#2d2d4e', label: 'Unsorted' },
-          ].map(({ color, label }) => (
-            <div key={label} className="flex items-center gap-1">
-              <div className="w-2.5 h-2.5 rounded-sm" style={{ background: color }} />
-              <span className="text-[#6b6b7a]" style={{ fontSize: 'clamp(0.55rem, 2vw, 0.7rem)' }}>{label}</span>
-            </div>
+            { color: '#d97706', label: 'Comparing', tip: 'Comparing elements: checking if left > right' },
+            { color: '#e8645a', label: 'Swapping', tip: 'Swapping: moving smaller element to correct position' },
+            { color: '#22c55e', label: 'Sorted', tip: 'These elements have bubbled to their final position' },
+            { color: '#2d2d4e', label: 'Unsorted', tip: 'Elements still being processed by the algorithm' },
+          ].map(({ color, label, tip }) => (
+            <Tooltip key={label} text={tip} position="bottom">
+              <div className="flex items-center gap-1 cursor-help">
+                <div className="w-2.5 h-2.5 rounded-sm" style={{ background: color }} />
+                <span className="text-[#6b6b7a]" style={{ fontSize: 'clamp(0.55rem, 2vw, 0.7rem)' }}>{label}</span>
+              </div>
+            </Tooltip>
           ))}
         </div>
 

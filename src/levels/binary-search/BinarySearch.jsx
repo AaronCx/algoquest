@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import DialogBox from '../../components/DialogBox.jsx'
 import ScoreScreen from '../../components/ScoreScreen.jsx'
+import Tooltip from '../../components/Tooltip.jsx'
 import { useGame } from '../../store/GameContext.jsx'
 
 const LEVEL_ID = 'binary-search'
@@ -285,15 +286,21 @@ export default function BinarySearch() {
         {/* Range indicator */}
         {phase === 'challenge' && foundIdx === null && (
           <div className="flex justify-between px-1">
-            <div className="pixel-font text-[0.45rem] text-[#4a4a6a]">
-              LOW={low}
-            </div>
-            <div className="pixel-font text-[0.5rem] text-[#d97706]">
-              MID={currentMid} → val={arr[currentMid]}
-            </div>
-            <div className="pixel-font text-[0.45rem] text-[#4a4a6a]">
-              HIGH={high}
-            </div>
+            <Tooltip text="Binary search: lower bound of remaining search space" position="bottom">
+              <div className="pixel-font text-[0.45rem] text-[#4a4a6a] cursor-help">
+                LOW={low}
+              </div>
+            </Tooltip>
+            <Tooltip text="Binary search: eliminating half the search space each step" position="bottom">
+              <div className="pixel-font text-[0.5rem] text-[#d97706] cursor-help">
+                MID={currentMid} → val={arr[currentMid]}
+              </div>
+            </Tooltip>
+            <Tooltip text="Binary search: upper bound of remaining search space" position="bottom">
+              <div className="pixel-font text-[0.45rem] text-[#4a4a6a] cursor-help">
+                HIGH={high}
+              </div>
+            </Tooltip>
           </div>
         )}
 
