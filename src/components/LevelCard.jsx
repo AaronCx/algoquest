@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { isUnlocked } from '../store/gameStore.js'
 import { useGame } from '../store/GameContext.jsx'
@@ -8,6 +9,7 @@ export default function LevelCard({ level, index, focused = false }) {
   const unlocked = isUnlocked(level.id, state.completedLevels, state.storyUnlockedLevels)
   const completed = state.completedLevels.includes(level.id)
   const stars = state.levelStars[level.id] || 0
+  const [hovered, setHovered] = useState(false)
 
   const statusClass = completed
     ? 'level-card-completed'
@@ -24,6 +26,8 @@ export default function LevelCard({ level, index, focused = false }) {
       className={`level-card ${statusClass}`}
       onClick={handleClick}
       onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && handleClick()}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       tabIndex={unlocked ? 0 : -1}
       role={unlocked ? 'button' : 'presentation'}
       aria-label={`${level.name} — ${completed ? 'completed' : unlocked ? 'play' : 'locked'}`}
@@ -50,6 +54,33 @@ export default function LevelCard({ level, index, focused = false }) {
 
       {/* Type badge */}
       <div className="text-xs text-[#6b6b7a]">{level.type}</div>
+
+      {/* Complexity badge */}
+      {level.complexity && (
+        <div
+          className="pixel-font"
+          style={{
+            fontSize: '0.38rem',
+            color: completed ? '#22c55e' : '#d97706',
+            background: completed ? 'rgba(34,197,94,0.1)' : 'rgba(217,119,6,0.1)',
+            border: `1px solid ${completed ? 'rgba(34,197,94,0.25)' : 'rgba(217,119,6,0.25)'}`,
+            padding: '0.15rem 0.35rem',
+            alignSelf: 'flex-start',
+          }}
+        >
+          {level.complexity}
+        </div>
+      )}
+
+      {/* Description on hover */}
+      {hovered && level.description && unlocked && (
+        <div
+          className="text-[#a0a0b0] leading-tight"
+          style={{ fontSize: 'clamp(0.55rem, 1.8vw, 0.65rem)' }}
+        >
+          {level.description}
+        </div>
+      )}
 
       {/* Stars */}
       <div className="flex gap-1 mt-auto pt-1">

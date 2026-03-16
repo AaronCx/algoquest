@@ -24,6 +24,8 @@ export const LEVEL_REGISTRY = [
     route: '/level/bubble-sort',
     xpReward: 100,
     unlockedByDefault: true,
+    complexity: 'O(n\u00B2)',
+    description: 'Compare and swap adjacent elements until sorted.',
   },
   {
     id: 'binary-search',
@@ -33,6 +35,8 @@ export const LEVEL_REGISTRY = [
     route: '/level/binary-search',
     xpReward: 150,
     unlockAfter: 'bubble-sort',
+    complexity: 'O(log n)',
+    description: 'Halve the search space each step to find the target.',
   },
   {
     id: 'stack-push-pop',
@@ -44,6 +48,8 @@ export const LEVEL_REGISTRY = [
     storyOnly: true,
     lockedHint: 'Complete the Stack Gate trial in RPG.',
     encounterId: 'stack_discipline',
+    complexity: 'O(1)',
+    description: 'Push and pop elements from a last-in-first-out stack.',
   },
   {
     id: 'linear-search',
@@ -55,6 +61,8 @@ export const LEVEL_REGISTRY = [
     storyOnly: true,
     lockedHint: "Help Byte find lost data in the RPG.",
     encounterId: 'linear_search',
+    complexity: 'O(n)',
+    description: 'Scan each element one by one until the target is found.',
   },
   {
     id: 'selection-sort',
@@ -66,6 +74,8 @@ export const LEVEL_REGISTRY = [
     storyOnly: true,
     lockedHint: 'Restore order in the Sorting Yard (RPG).',
     encounterId: 'selection_sort',
+    complexity: 'O(n\u00B2)',
+    description: 'Find the minimum element and place it in position repeatedly.',
   },
   {
     id: 'euclid-gcd',
@@ -77,6 +87,8 @@ export const LEVEL_REGISTRY = [
     storyOnly: true,
     lockedHint: "Pass Profiler V's trial in the RPG.",
     encounterId: 'euclid_gcd',
+    complexity: 'O(log min(a,b))',
+    description: 'Repeatedly divide to find the greatest common divisor.',
   },
   {
     id: 'floyd-cycle',
@@ -88,6 +100,8 @@ export const LEVEL_REGISTRY = [
     storyOnly: true,
     lockedHint: 'Face the Loop Lake trial in the RPG.',
     encounterId: 'floyd_cycle',
+    complexity: 'O(n)',
+    description: 'Use slow and fast pointers to detect a cycle in a list.',
   },
   {
     id: 'bfs-maze',
@@ -99,6 +113,8 @@ export const LEVEL_REGISTRY = [
     storyOnly: true,
     lockedHint: 'Complete the BFS Rescue in the RPG.',
     encounterId: 'bfs_rescue',
+    complexity: 'O(V+E)',
+    description: 'Explore all neighbors level by level to find the shortest path.',
   },
   {
     id: 'heap-sort',
@@ -108,6 +124,8 @@ export const LEVEL_REGISTRY = [
     route: '/level/heap-sort',
     xpReward: 220,
     unlockAfter: 'bubble-sort',
+    complexity: 'O(n log n)',
+    description: 'Build a max-heap, then extract the maximum repeatedly.',
   },
   {
     id: 'merge-sort',
@@ -117,6 +135,8 @@ export const LEVEL_REGISTRY = [
     route: '/level/merge-sort',
     xpReward: 200,
     unlockAfter: 'bubble-sort',
+    complexity: 'O(n log n)',
+    description: 'Divide the array in half, sort each half, then merge.',
   },
   {
     id: 'quick-sort',
@@ -126,6 +146,8 @@ export const LEVEL_REGISTRY = [
     route: '/level/quick-sort',
     xpReward: 250,
     unlockAfter: 'bubble-sort',
+    complexity: 'O(n log n)',
+    description: 'Pick a pivot, partition around it, then recurse on each side.',
   },
   {
     id: 'dijkstra',
@@ -135,6 +157,8 @@ export const LEVEL_REGISTRY = [
     route: '/level/dijkstra',
     xpReward: 200,
     unlockAfter: 'bfs-maze',
+    complexity: 'O(V\u00B2)',
+    description: 'Find shortest paths from a source by greedily relaxing edges.',
   },
   {
     id: 'bst',
@@ -144,6 +168,8 @@ export const LEVEL_REGISTRY = [
     route: '/level/bst',
     xpReward: 180,
     unlockAfter: 'binary-search',
+    complexity: 'O(log n)',
+    description: 'Insert and search values in a balanced tree structure.',
   },
   {
     id: 'dfs-traversal',
@@ -153,6 +179,8 @@ export const LEVEL_REGISTRY = [
     route: '/level/dfs-traversal',
     xpReward: 190,
     unlockAfter: 'bfs-maze',
+    complexity: 'O(V+E)',
+    description: 'Explore as deep as possible before backtracking.',
   },
 ]
 
