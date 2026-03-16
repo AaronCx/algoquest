@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence } from 'framer-motion'
 import { useTheme, THEMES } from '../store/ThemeContext.jsx'
 import { useGame } from '../store/GameContext.jsx'
 

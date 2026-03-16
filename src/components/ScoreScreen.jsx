@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import PixelButton from './PixelButton.jsx'
 
 const STAR_COLORS = ['#fbbf24', '#f59e0b', '#d97706']

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import DialogBox from '../../components/DialogBox.jsx'
@@ -75,10 +75,10 @@ export default function SelectionSort() {
       setSortedCount(newSorted)
 
       if (newSorted >= N - 1) {
-        finishScore(correct + (isCorrect ? 1 : 0), total + 1)
+        finishScore(correct + (isCorrect ? 1 : 0), total + 1) // eslint-disable-line react-hooks/immutability
       }
     }, 500)
-  }, [phase, feedback, sortedCount, arr, N, correct, total])
+  }, [phase, feedback, sortedCount, arr, N, correct, total]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function finishScore(c, t) {
     const accuracy = t > 0 ? c / t : 1

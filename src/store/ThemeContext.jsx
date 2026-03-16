@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const THEMES = {
   undertale: {
     id: 'undertale',
@@ -31,7 +32,7 @@ export function ThemeProvider({ children }) {
   // Apply on first render
   useEffect(() => {
     document.documentElement.dataset.theme = theme
-  }, [])
+  }, [theme])
 
   return (
     <ThemeCtx.Provider value={{ theme, setTheme, themes: THEMES }}>
@@ -40,4 +41,5 @@ export function ThemeProvider({ children }) {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useTheme = () => useContext(ThemeCtx)

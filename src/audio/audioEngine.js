@@ -135,7 +135,7 @@ function semitoneToHz(base, semi) {
 function stopBGM() {
   clearInterval(bgmInterval)
   bgmInterval = null
-  if (bgmOsc) { try { bgmOsc.stop() } catch {} bgmOsc = null }
+  if (bgmOsc) { try { bgmOsc.stop() } catch { /* ignore stop errors */ } bgmOsc = null }
   if (bgmGain) { bgmGain.disconnect(); bgmGain = null }
   currentZone = null
 }

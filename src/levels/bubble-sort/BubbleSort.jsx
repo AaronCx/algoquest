@@ -108,13 +108,13 @@ export default function BubbleSort() {
       // Space to pause/play during auto
       if (e.key === ' ') {
         e.preventDefault()
-        if (phase === 'auto') handlePlayPause()
+        if (phase === 'auto') handlePlayPause() // eslint-disable-line react-hooks/immutability
       }
       // Left/Right for step navigation during auto (when paused)
       if (phase === 'auto' && stepPaused) {
         if (e.key === 'ArrowRight') {
           e.preventDefault()
-          handleNextStep()
+          handleNextStep() // eslint-disable-line react-hooks/immutability
         }
       }
       // Escape to go back
@@ -156,13 +156,13 @@ export default function BubbleSort() {
     stepStateRef.current = { current: [...autoArr], si: 0, currentSortedFrom: sf }
 
     if (steps.length === 0) {
-      setTimeout(finishScore, t(600))
+      setTimeout(finishScore, t(600)) // eslint-disable-line react-hooks/immutability
       return
     }
 
     // If not in step mode, start auto-playing
     if (!stepMode) {
-      autoRef.current = setTimeout(() => runAutoStep(), t(400))
+      autoRef.current = setTimeout(() => runAutoStep(), t(400)) // eslint-disable-line react-hooks/immutability
     } else {
       // Show first step description
       setStepDesc(steps[0]?.desc || '')

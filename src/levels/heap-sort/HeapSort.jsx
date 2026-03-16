@@ -93,7 +93,7 @@ function getTreePositions(n) {
   for (let i = 0; i < n; i++) {
     const d = Math.floor(Math.log2(i + 1))
     const posInLevel = i - (Math.pow(2, d) - 1)
-    const nodesInLevel = Math.min(Math.pow(2, d), n - Math.pow(2, d) + 1)
+    // nodesInLevel intentionally unused — layout uses posInLevel directly
     const levelWidth = width / Math.pow(2, d)
     const x = levelWidth * (posInLevel + 0.5)
     const y = (d / (depth - 1 || 1)) * height
@@ -117,7 +117,7 @@ export default function HeapSort() {
   // Challenge: user helps build the heap (sift down decisions)
   const [challengeIdx, setChallengeIdx] = useState(null) // current node being sifted
   const [challengeChild, setChallengeChild] = useState(null) // which child to compare
-  const [heapBuilt, setHeapBuilt] = useState(false)
+  const [, setHeapBuilt] = useState(false)
 
   // Auto-animate
   const [autoArr, setAutoArr] = useState(null)
@@ -226,7 +226,7 @@ export default function HeapSort() {
   useEffect(() => {
     if (phase !== 'auto' || !autoArr) return
 
-    const { steps } = computeHeapSortSteps(autoArr)
+    computeHeapSortSteps(autoArr)
     // Skip to extraction steps (heap is already built by challenge)
     // Actually re-run full algorithm on the array since it's already a heap
     // We'll just do extract steps

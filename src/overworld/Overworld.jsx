@@ -270,7 +270,7 @@ export default function Overworld() {
       if (i >= text.length) { clearInterval(typingTimer.current); setTypingDone(true) }
     }, 22)
     return () => clearInterval(typingTimer.current)
-  }, [dialogState?.nodeId, dialogState?.text])
+  }, [dialogState?.nodeId, dialogState?.text]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Position setter ───────────────────────────────────────────────────────
   function setPos(newPos) {

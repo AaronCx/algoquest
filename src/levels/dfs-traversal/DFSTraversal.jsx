@@ -82,7 +82,7 @@ function generateGraph(seed) {
 }
 
 // ── DFS (iterative with explicit stack) ─────────────────────────────────────
-function runDFS(adj, startId, allNodes) {
+function runDFS(adj, startId, _allNodes) {
   const visited = new Set()
   const stack = [startId]
   const steps = [] // { current, visited, stack, backtrack }

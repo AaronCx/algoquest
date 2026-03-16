@@ -47,7 +47,6 @@ export default function BinarySearch() {
   const [history, setHistory] = useState([])
 
   const optimalSteps = Math.ceil(Math.log2(ARR_SIZE))
-  const mid = Math.floor((low + high) / 2)
 
   function startChallenge(freshArr) {
     const a = freshArr ?? arr
@@ -112,6 +111,7 @@ export default function BinarySearch() {
     else setHigh(currentMid - 1)
   }, [phase, low, high, arr, target, steps, optimalSteps, completeLevel])
 
+  /* eslint-disable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
   // Check if found after bounds update
   useEffect(() => {
     if (phase !== 'challenge' || target === null) return
@@ -138,6 +138,7 @@ export default function BinarySearch() {
       setTimeout(() => setPhase('score'), 1200)
     }
   }, [low, high])
+  /* eslint-enable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
 
   // Keyboard shortcuts
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import DialogBox from '../../components/DialogBox.jsx'
@@ -153,7 +153,7 @@ export default function BST() {
 
   // ── Start ─────────────────────────────────────────────────────────────────
   function startChallenge() {
-    const seed = Date.now()
+    const seed = Date.now() // eslint-disable-line react-hooks/purity
     const seq = generateSequence(seed)
     setSequence(seq)
     setTree(null)

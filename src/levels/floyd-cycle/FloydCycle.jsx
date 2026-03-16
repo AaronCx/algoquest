@@ -119,7 +119,6 @@ export default function FloydCycle() {
 
   // Node layout: arrange nodes in a line + loop shape
   const { nodes, cycleStart, tailLen, cycleLen } = list
-  const total = nodes.length
 
   return (
     <div className="min-h-dvh bg-[#0a0a0f] flex flex-col">

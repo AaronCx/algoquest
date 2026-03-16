@@ -31,8 +31,8 @@ function makeArray(n = 8) {
   return arr
 }
 
-// Pre-compute all merge sort steps for visualization
-function computeMergeSortSteps(inputArr) {
+// Pre-compute all merge sort steps for visualization (used for future auto-mode)
+function computeMergeSortSteps(inputArr) { // eslint-disable-line no-unused-vars
   const steps = []
   const arr = [...inputArr]
 
@@ -97,11 +97,11 @@ export default function MergeSort() {
   const [mergeState, setMergeState] = useState(null) // {left, right, merged, leftI, rightI, lo, hi}
   const [challengeDone, setChallengeDone] = useState(false)
 
-  // Auto-animate
-  const [autoArr, setAutoArr] = useState(null)
-  const [autoHighlight, setAutoHighlight] = useState(null) // {type, indices}
-  const [autoMergeRange, setAutoMergeRange] = useState(null) // {lo, hi}
-  const [sortedRanges, setSortedRanges] = useState([])
+  // Auto-animate (reserved for future auto-mode expansion)
+  const [autoArr, setAutoArr] = useState(null) // eslint-disable-line no-unused-vars
+  const [, setAutoHighlight] = useState(null)
+  const [, setAutoMergeRange] = useState(null)
+  const [, setSortedRanges] = useState([])
   const autoRef = useRef(null)
 
   const N = arr.length
@@ -176,7 +176,7 @@ export default function MergeSort() {
         }, 600)
       }
     }, 350)
-  }, [phase, feedback, mergeState, correct, total])
+  }, [phase, feedback, mergeState, correct, total]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -216,32 +216,6 @@ export default function MergeSort() {
   }
 
   // Display
-  const maxVal = Math.max(...arr)
-
-  function getBarColor(idx) {
-    if (phase === 'challenge' && mergeState) {
-      const { merged, left, right, leftI, rightI, mid } = mergeState
-      // Merged portion
-      if (idx < merged.length) return '#22c55e'
-      // Currently comparing
-      const mergedLen = merged.length
-      if (mergedLen < left.length + right.length) {
-        // Show left half vs right half
-        if (idx <= mid) return '#3b82f6'  // left half - blue
-        return '#8b5cf6'                   // right half - purple
-      }
-      return '#2d2d4e'
-    }
-    return '#2d2d4e'
-  }
-
-  function getBarGlow(idx) {
-    if (phase === 'challenge' && mergeState) {
-      const { merged } = mergeState
-      if (idx === merged.length) return '0 0 14px rgba(217,119,6,0.7)'
-    }
-    return 'none'
-  }
 
   // Build display array for challenge phase
   let displayArr = arr
@@ -321,10 +295,9 @@ export default function MergeSort() {
             let glow = 'none'
 
             if (phase === 'challenge' && mergeState && !challengeDone) {
-              const { merged, left, leftI, right, rightI } = mergeState
+              const { merged, left, leftI } = mergeState
               const mergedLen = merged.length
               const remainLeft = left.length - leftI
-              const remainRight = right.length - rightI
 
               if (idx < mergedLen) {
                 bgColor = '#22c55e'

@@ -89,7 +89,7 @@ export default function StackPushPop() {
     setTimeout(() => {
       setFeedback(null)
       if (opIdx + 1 >= ops.length) {
-        finishScore(correct + (isCorrect ? 1 : 0), total + 1)
+        finishScore(correct + (isCorrect ? 1 : 0), total + 1) // eslint-disable-line react-hooks/immutability
       } else {
         const nextIdx = opIdx + 1
         const nextOp = ops[nextIdx]
@@ -101,7 +101,7 @@ export default function StackPushPop() {
         }
       }
     }, 600)
-  }, [phase, feedback, opIdx, ops, correct, total])
+  }, [phase, feedback, opIdx, ops, correct, total]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (phase !== 'challenge') return

@@ -1,9 +1,20 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGame } from '../store/GameContext.jsx'
 import { useAudio } from '../audio/AudioContext.jsx'
 import { ENCOUNTERS } from '../data/encounters/index.js'
+
+// ── Stars display ──────────────────────────────────────────────────────────────
+function Stars({ count }) {
+  return (
+    <div className="flex gap-2 justify-center mt-2">
+      {[1,2,3].map(s => (
+        <span key={s} style={{ fontSize: '1.2rem', color: s <= count ? '#fbbf24' : '#2a2a3a' }}>★</span>
+      ))}
+    </div>
+  )
+}
 
 // ── Phase constants ────────────────────────────────────────────────────────────
 const PHASE = {
@@ -103,17 +114,6 @@ export default function PlaceholderBattle() {
   const totalQ   = mcqSteps.length
   const accuracy = totalQ > 0 ? Math.round((correctCount / totalQ) * 100) : 100
   const stars    = accuracy >= 90 ? 3 : accuracy >= 60 ? 2 : 1
-
-  // ── Stars display ─────────────────────────────────────────────────────────
-  function Stars({ count }) {
-    return (
-      <div className="flex gap-2 justify-center mt-2">
-        {[1,2,3].map(s => (
-          <span key={s} style={{ fontSize: '1.2rem', color: s <= count ? '#fbbf24' : '#2a2a3a' }}>★</span>
-        ))}
-      </div>
-    )
-  }
 
   // ── Render phases ─────────────────────────────────────────────────────────
 

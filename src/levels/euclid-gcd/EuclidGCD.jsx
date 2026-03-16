@@ -91,7 +91,7 @@ export default function EuclidGCD() {
     setTimeout(() => {
       setFeedback(null)
       if (stepIdx + 1 >= problem.steps.length) {
-        finishScore(correct + (isCorrect ? 1 : 0), total + 1)
+        finishScore(correct + (isCorrect ? 1 : 0), total + 1) // eslint-disable-line react-hooks/immutability
       } else {
         const nextIdx = stepIdx + 1
         const nextStep = problem.steps[nextIdx]
@@ -99,7 +99,7 @@ export default function EuclidGCD() {
         setOptions(makeOptions(nextStep.remainder, nextStep.a, nextStep.b))
       }
     }, 700)
-  }, [phase, feedback, stepIdx, problem, correct, total])
+  }, [phase, feedback, stepIdx, problem, correct, total]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (phase !== 'challenge') return

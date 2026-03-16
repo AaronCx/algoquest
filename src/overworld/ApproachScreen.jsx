@@ -14,6 +14,19 @@ export default function ApproachScreen() {
   const [approachIdx, setApproachIdx] = useState(null)
   const [phase, setPhase] = useState('approach') // approach | results
 
+  const approachStep = encounter ? (encounter.steps || []).find(s => s.type === 'approach') : null
+  const didAutoComplete = useRef(false)
+
+  // If no approach step, complete and redirect on mount
+  useEffect(() => {
+    if (!encounter || !encounterId) return
+    if (!approachStep && !didAutoComplete.current) {
+      didAutoComplete.current = true
+      completeEncounterWithEffects(encounterId, {})
+      navigate(encounter.isAct1End ? '/act1cutscene' : '/rpg', { replace: true })
+    }
+  }, [approachStep, encounterId, encounter, navigate, completeEncounterWithEffects])
+
   if (!encounter || !encounterId) {
     return (
       <div className="min-h-dvh page-bg flex flex-col items-center justify-center p-6 gap-4">
@@ -24,18 +37,6 @@ export default function ApproachScreen() {
       </div>
     )
   }
-
-  const approachStep = (encounter.steps || []).find(s => s.type === 'approach')
-  const didAutoComplete = useRef(false)
-
-  // If no approach step, complete and redirect on mount
-  useEffect(() => {
-    if (!approachStep && !didAutoComplete.current) {
-      didAutoComplete.current = true
-      completeEncounterWithEffects(encounterId, {})
-      navigate(encounter.isAct1End ? '/act1cutscene' : '/rpg', { replace: true })
-    }
-  }, [approachStep, encounterId, encounter, navigate, completeEncounterWithEffects])
 
   if (!approachStep) return null
 
