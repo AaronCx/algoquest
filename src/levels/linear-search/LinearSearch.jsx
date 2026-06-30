@@ -166,9 +166,7 @@ export default function LinearSearch() {
               const isFound = idx === foundIdx
               const isWrong = wrongFlash === idx
 
-              let bg = '#1a1a2a'
-              let border = '#2a2a3a'
-              let textColor = 'transparent'
+              let bg, border, textColor
 
               if (isFound) { bg = '#22c55e'; border = '#22c55e'; textColor = '#000' }
               else if (isWrong) { bg = '#3a1a1a'; border = '#e8645a'; textColor = '#e8645a' }

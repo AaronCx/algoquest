@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 
 export default function Tooltip({ text, children, position = 'top' }) {
   const [visible, setVisible] = useState(false)
