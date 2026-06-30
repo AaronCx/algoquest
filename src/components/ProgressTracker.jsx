@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { useGame } from '../store/GameContext.jsx'
 import { LEVELS } from '../store/gameStore.js'
 
