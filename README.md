@@ -6,6 +6,8 @@
 
 A browser-based algorithm visualizer RPG built with React, Tailwind CSS, Vite, and Framer Motion. Fully static, client-side — deployed to GitHub Pages.
 
+![Bubble Sort level mid-visualization — comparing two bars, with SWAP/KEEP decisions and per-step progress](.github/assets/bubble-sort-level.png)
+
 ## Features
 
 ### RPG Adventure Mode (Act I)
